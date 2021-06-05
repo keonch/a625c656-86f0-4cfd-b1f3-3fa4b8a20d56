@@ -3,7 +3,8 @@ class DogsController < ApplicationController
   before_action :authorize_dog_edit, only: [:edit, :update]
   before_action :authenticate_user!, only: [:like]
 
-  DOGS_PER_PAGE = 5  
+  DOGS_PER_PAGE = 5
+  SORT_OPTIONS = ["new", "rising"]
   # GET /dogs
   # GET /dogs.json
   def index
@@ -12,7 +13,14 @@ class DogsController < ApplicationController
     if @page <= 0
       @page = 1
     end
-    @dogs = Dog.offset(DOGS_PER_PAGE * @page - DOGS_PER_PAGE).limit(DOGS_PER_PAGE)
+
+    @sort_options = SORT_OPTIONS
+    @option = page_params[:sort]
+    if @option == "rising"
+      @dogs = Dog.offset(DOGS_PER_PAGE * @page - DOGS_PER_PAGE).limit(DOGS_PER_PAGE).order()
+    else
+      @dogs = Dog.includes(:owner).offset(DOGS_PER_PAGE * @page - DOGS_PER_PAGE).limit(DOGS_PER_PAGE).order('created_at DESC').with_attached_images
+    end
   end
 
   # GET /dogs/1
@@ -108,7 +116,7 @@ class DogsController < ApplicationController
     end
 
     def page_params
-      params.permit(:page)
+      params.permit(:page, :sort)
     end
 
     # authorizes edit on dogs without owners (for rspec tests on dogs without owner)
