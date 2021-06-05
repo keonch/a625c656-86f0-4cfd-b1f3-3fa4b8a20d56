@@ -1,5 +1,6 @@
 class DogsController < ApplicationController
   before_action :set_dog, only: [:show, :edit, :update, :destroy]
+  before_action :authorize_dog_edit, only: [:edit, :update]
 
   DOGS_PER_PAGE = 5  
   # GET /dogs
@@ -47,6 +48,7 @@ class DogsController < ApplicationController
   # PATCH/PUT /dogs/1
   # PATCH/PUT /dogs/1.json
   def update
+    @dog.owner = current_user
     respond_to do |format|
       if @dog.update(dog_params)
         @dog.images.attach(params[:dog][:image]) if params[:dog][:image].present?
@@ -83,5 +85,14 @@ class DogsController < ApplicationController
 
     def page_params
       params.permit(:page)
+    end
+
+    # authorizes edit on dogs without owners
+    def authorize_dog_edit
+      if @dog && @dog.owner_id && current_user && @dog.owner_id != current_user.id
+        respond_to do |format|
+          format.html { redirect_to @dog, notice: 'You are not the dog owner.' }
+        end
+      end
     end
 end
