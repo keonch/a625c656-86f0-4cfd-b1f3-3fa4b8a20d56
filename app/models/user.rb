@@ -7,4 +7,7 @@ class User < ApplicationRecord
   has_many :dogs,
     class_name: :Dog,
     foreign_key: :owner_id
+  
+  has_many :likes,
+    through: :dogs
 end

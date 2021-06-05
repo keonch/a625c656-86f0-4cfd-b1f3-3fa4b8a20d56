@@ -5,4 +5,8 @@ class Dog < ApplicationRecord
     required: false,
     class_name: :User,
     foreign_key: :owner_id
+
+  has_many :likes,
+    class_name: :Like,
+    foreign_key: :dog_id
 end
