@@ -28,10 +28,6 @@ module DogsHelper
   end
 
   def delegate(dogs, sort, page)
-    puts "======================================================"
-    puts page
-    puts sort
-    puts "======================================================"
     delegated_dogs = Indexed.new(dogs)
     delegated_dogs.sort_type = sort
     delegated_dogs.curr_page = page

@@ -1,7 +1,7 @@
 class DogsController < ApplicationController
   before_action :set_dog, only: [:show, :edit, :update, :destroy, :like]
-  # before_action :authorize_dog_edit, only: [:edit, :update]
-  # before_action :authenticate_user!, only: [:like]
+  before_action :authorize_dog_edit, only: [:edit, :update]
+  before_action :authenticate_user!, only: [:like]
 
   # GET /dogs
   # GET /dogs.json
