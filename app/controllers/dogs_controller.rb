@@ -9,7 +9,8 @@ class DogsController < ApplicationController
   # GET /dogs.json
   def index
     @sort_options = SORT_OPTIONS
-    # TODO: confine pages from 1 to last page (count(dog) / DOGS_PER_PAGE)
+    # TODO: confine pages from 1 to last page (Dog.size / DOGS_PER_PAGE)
+    # fix pagination for "rising"
     @page = page_params[:page].to_i
     if @page <= 0
       @page = 1
