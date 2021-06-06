@@ -14,12 +14,12 @@ class DogsController < ApplicationController
     if @page <= 0
       @page = 1
     end
+    offset = DOGS_PER_PAGE * @page - DOGS_PER_PAGE
     @sort = page_params[:sort]
     if @sort == "rising"
-      puts "ASDFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"
-      @dogs = Dog.recent_likes.with_attached_images
+      @dogs = Dog.joins(:likes).where('likes.created_at BETWEEN ? AND ?', 1.hours.ago, Time.now).group('dogs.id').order('COUNT(likes.id) DESC').with_attached_images
     else
-      @dogs = Dog.order('created_at DESC').offset(DOGS_PER_PAGE * @page - DOGS_PER_PAGE).limit(DOGS_PER_PAGE).with_attached_images
+      @dogs = Dog.order(created_at: :desc).offset(offset).limit(DOGS_PER_PAGE).with_attached_images
     end
   end
 
