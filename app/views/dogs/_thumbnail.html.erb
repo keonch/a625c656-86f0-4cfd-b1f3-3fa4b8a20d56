@@ -5,3 +5,7 @@
     <span><%= dog.likes_count %></span>
   </article>
 </a>
+
+<% if (defined? dog_counter) && (dog_counter + 1) % 2 == 0 %>
+  <%= image_tag 'ad.jpg' %>
+<% end %>

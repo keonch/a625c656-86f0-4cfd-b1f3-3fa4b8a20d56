@@ -1,6 +1,7 @@
 <% @sort_options.each do |option| %>
-    <%= link_to option.capitalize(), dogs_path(sort: option) %>
+  <%= link_to option.capitalize(), dogs_path(sort: option) %>
 <% end %>
+
 <%= render partial: 'thumbnail', collection: @dogs, as: :dog %>
 <%= link_to "Last Page", dogs_path(page: @page - 1) %>
 <%= link_to "Next Page", dogs_path(page: @page + 1) %>

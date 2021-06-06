@@ -15,9 +15,11 @@ class DogsController < ApplicationController
       @page = 1
     end
     offset = DOGS_PER_PAGE * @page - DOGS_PER_PAGE
-    @sort = page_params[:sort]
-    if @sort == "rising"
-      @dogs = Dog.joins(:likes).where('likes.created_at BETWEEN ? AND ?', 1.hours.ago, Time.now).group('dogs.id').order('COUNT(likes.id) DESC').with_attached_images
+    sort = page_params[:sort]
+    if sort == "rising"
+      # This query becomes expensive when handling frequent requests on index pages as the Like table gets counted
+      # An alternative is to design a cache that writes/removes Likes with an hour expiry, tracking number of likes and the relative dog_ids
+      @dogs = Dog.joins(:likes).where('likes.created_at BETWEEN ? AND ?', 1.hours.ago, Time.now).group('dogs.id').order('COUNT(likes.id) DESC').offset(offset).limit(DOGS_PER_PAGE).with_attached_images
     else
       @dogs = Dog.order(created_at: :desc).offset(offset).limit(DOGS_PER_PAGE).with_attached_images
     end
@@ -112,14 +114,14 @@ class DogsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def dog_params
-      params.require(:dog).permit(:name, :description, :images)
+      params.require(:dog).permit(:name, :description, images: [])
     end
 
     def page_params
       params.permit(:page, :sort)
     end
 
-    # authorizes edit on dogs without owners (for rspec tests on dogs without owner)
+    # authorizes edit on dogs without owners (rspec tests dog edit without owner)
     def authorize_dog_edit
       if helpers.dog_has_owner? && !helpers.user_is_dog_owner?
         respond_to do |format|
