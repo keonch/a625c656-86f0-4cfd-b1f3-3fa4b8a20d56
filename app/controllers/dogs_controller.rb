@@ -1,29 +1,15 @@
 class DogsController < ApplicationController
   before_action :set_dog, only: [:show, :edit, :update, :destroy, :like]
-  before_action :authorize_dog_edit, only: [:edit, :update]
-  before_action :authenticate_user!, only: [:like]
+  # before_action :authorize_dog_edit, only: [:edit, :update]
+  # before_action :authenticate_user!, only: [:like]
 
-  DOGS_PER_PAGE = 5
-  SORT_OPTIONS = ["new", "rising"]
   # GET /dogs
   # GET /dogs.json
   def index
-    @sort_options = SORT_OPTIONS
-    # TODO: confine pages from 1 to last page (Dog.size / DOGS_PER_PAGE)
-    # fix pagination for "rising"
-    @page = page_params[:page].to_i
-    if @page <= 0
-      @page = 1
-    end
-    offset = DOGS_PER_PAGE * @page - DOGS_PER_PAGE
+    page = page_params[:page].to_i
     sort = page_params[:sort]
-    if sort == "rising"
-      # This query becomes expensive when handling frequent requests on index pages as the Like table gets counted
-      # An alternative is to design a cache that writes/removes Likes with an hour expiry, tracking number of likes and the relative dog_ids
-      @dogs = Dog.joins(:likes).where('likes.created_at BETWEEN ? AND ?', 1.hours.ago, Time.now).group('dogs.id').order('COUNT(likes.id) DESC').offset(offset).limit(DOGS_PER_PAGE).with_attached_images
-    else
-      @dogs = Dog.order(created_at: :desc).offset(offset).limit(DOGS_PER_PAGE).with_attached_images
-    end
+    dogs = Dog.with_attached_images.sorted(sort).paginated(page: page, n: 5)
+    @dogs = helpers.delegate(dogs, sort, page)
   end
 
   # GET /dogs/1
@@ -119,7 +105,8 @@ class DogsController < ApplicationController
     end
 
     def page_params
-      params.permit(:page, :sort)
+      default={ sort: "new", page: "1"}
+      params.permit(:page, :sort).reverse_merge(default)
     end
 
     # authorizes edit on dogs without owners (rspec tests dog edit without owner)
