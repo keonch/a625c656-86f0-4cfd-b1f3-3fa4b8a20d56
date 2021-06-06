@@ -8,6 +8,6 @@ module DogsHelper
   end
 
   def user_liked_dog?
-    false
+    @dog.likes.any? {|like| like.user == current_user}
   end
 end

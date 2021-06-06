@@ -8,18 +8,18 @@ class DogsController < ApplicationController
   # GET /dogs
   # GET /dogs.json
   def index
+    @sort_options = SORT_OPTIONS
     # TODO: confine pages from 1 to last page (count(dog) / DOGS_PER_PAGE)
     @page = page_params[:page].to_i
     if @page <= 0
       @page = 1
     end
-
-    @sort_options = SORT_OPTIONS
-    @option = page_params[:sort]
-    if @option == "rising"
-      @dogs = Dog.offset(DOGS_PER_PAGE * @page - DOGS_PER_PAGE).limit(DOGS_PER_PAGE).order()
+    @sort = page_params[:sort]
+    if @sort == "rising"
+      puts "ASDFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"
+      @dogs = Dog.recent_likes.with_attached_images
     else
-      @dogs = Dog.includes(:owner).offset(DOGS_PER_PAGE * @page - DOGS_PER_PAGE).limit(DOGS_PER_PAGE).order('created_at DESC').with_attached_images
+      @dogs = Dog.order('created_at DESC').offset(DOGS_PER_PAGE * @page - DOGS_PER_PAGE).limit(DOGS_PER_PAGE).with_attached_images
     end
   end
 
