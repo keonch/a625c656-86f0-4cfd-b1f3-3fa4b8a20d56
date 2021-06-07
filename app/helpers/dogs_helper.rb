@@ -24,7 +24,8 @@ module DogsHelper
   end
 
   def prev_page(input)
-    link_to "Previous", dogs_path(sort: input.sort_type, page: input.curr_page - 1)
+    page = input.curr_page < 2 ? 1 : input.curr_page - 1
+    link_to "Previous", dogs_path(sort: input.sort_type, page: page)
   end
 
   def delegate(dogs, sort, page)
