@@ -1,0 +1,43 @@
+/* Mobile */
+@media only screen 
+and (max-width : 480px) {
+  .thumbnails {
+    --repeat: 1;
+  }
+}
+
+/* Tablet */
+@media only screen
+and (min-width : 480px) 
+and (max-width : 900px) {
+  .thumbnails {
+    --repeat: 2;
+  }
+}
+
+/* Desktop */
+@media only screen 
+and (min-width : 900px) {
+  .thumbnails {
+    --repeat: 3;
+  }
+}
+
+.thumbnails {
+  display: grid;
+  grid-template-columns: repeat(var(--repeat, 1), minmax(150px,400px));
+  gap: .5rem;
+  padding: .5rem;
+}
+
+.thumbnail {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dog-post {
+  display: flex;
+  flex-flow: column nowrap;
+}
+

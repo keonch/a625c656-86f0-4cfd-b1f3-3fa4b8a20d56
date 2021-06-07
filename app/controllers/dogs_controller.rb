@@ -9,6 +9,7 @@ class DogsController < ApplicationController
     page = page_params[:page].to_i
     sort = page_params[:sort]
     dogs = Dog.with_attached_images.sorted(sort).paginated(page: page, n: 5)
+    # TODO: add helper methods to confine pages from 1 to total number of pages (dogs.size / 5).ceil
     @dogs = helpers.delegate(dogs, sort, page)
   end
 

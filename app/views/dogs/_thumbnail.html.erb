@@ -1,8 +1,11 @@
 <a href="<%= url_for(dog) %>">
-  <article>
+  <article class="dog-post">
     <h2 class="dog-name"><%= dog.name %></h2>
-    <%= image_tag url_for(dog.images.first), class: "dog-photo", alt: "Photo of #{dog.name}" %>
-    <span><%= dog.likes_count %></span>
+    <div class="thumbnails">
+      <% dog.images.each do |image| %>
+        <%= image_tag url_for(image), alt: "Photo of #{dog.name}", class: "thumbnail" %>
+      <% end %>
+    </div>
   </article>
 </a>
 
