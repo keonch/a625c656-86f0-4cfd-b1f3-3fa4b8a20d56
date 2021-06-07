@@ -1,12 +1,14 @@
 <a href="<%= url_for(dog) %>">
-  <article class="dog-post">
+  <div class="dog-post">
     <h2 class="dog-name"><%= dog.name %></h2>
     <div class="thumbnails">
       <% dog.images.each do |image| %>
-        <%= image_tag url_for(image), alt: "Photo of #{dog.name}", class: "thumbnail" %>
+        <figure class="figure">
+          <%= image_tag url_for(image), alt: "Photo of #{dog.name}", class: "thumbnail figure-img img-fluid rounded" %>
+        </figure>
       <% end %>
     </div>
-  </article>
+  </div>
 </a>
 
 <% if (defined? dog_counter) && (dog_counter + 1) % 2 == 0 %>

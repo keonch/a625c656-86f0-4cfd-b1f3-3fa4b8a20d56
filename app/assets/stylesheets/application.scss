@@ -1,3 +1,9 @@
 @import "bootstrap";
 @import 'thumbnail';
 @import 'carousel';
+@import 'nav';
+
+#main {
+    max-width: 1000px;
+    margin: auto;
+}

@@ -1,5 +1,5 @@
 /* Mobile */
-@media only screen 
+@media screen 
 and (max-width : 480px) {
   .thumbnails {
     --repeat: 1;
@@ -7,7 +7,7 @@ and (max-width : 480px) {
 }
 
 /* Tablet */
-@media only screen
+@media screen
 and (min-width : 480px) 
 and (max-width : 900px) {
   .thumbnails {
@@ -16,7 +16,7 @@ and (max-width : 900px) {
 }
 
 /* Desktop */
-@media only screen 
+@media screen 
 and (min-width : 900px) {
   .thumbnails {
     --repeat: 3;
@@ -25,14 +25,18 @@ and (min-width : 900px) {
 
 .thumbnails {
   display: grid;
-  grid-template-columns: repeat(var(--repeat, 1), minmax(150px,400px));
+  grid-template-columns: repeat(var(--repeat, 1), 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  grid-auto-rows: 0;
+  overflow-y: hidden;
+  max-height: 400px;
   gap: .5rem;
   padding: .5rem;
 }
 
 .thumbnail {
   width: 100%;
-  height: 100%;
+  height: 400px;
   object-fit: cover;
 }
 

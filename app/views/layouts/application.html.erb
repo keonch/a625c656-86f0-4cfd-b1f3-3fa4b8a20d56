@@ -4,7 +4,7 @@
     <title>DogProfile</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track": "reload" %>
     <%= javascript_include_tag "application", "data-turbolinks-track": "reload" %>
   </head>
@@ -14,13 +14,15 @@
       <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light" >
         <div class="container-fluid">
           <%= link_to 'Dog Profile Demo', root_path, class: "navbar-brand" %>
-          <% if current_user %>
-            <%= link_to 'Add your dog', new_dog_path , class: "btn btn-sm btn-outline-secondary" %>
-            <%= link_to 'Sign out', destroy_user_session_path, method: :delete, class: "btn btn-sm btn-outline-secondary" %>
-          <% else %>
-            <%= link_to 'Sign in', new_user_session_path, class: "btn btn-sm btn-outline-secondary" %>
-            <%= link_to 'Sign up', new_user_registration_path, class: "btn btn-sm btn-outline-secondary" %>
-          <% end %>
+          <div class="nav-button-container">
+            <% if current_user %>
+              <%= link_to 'Add your dog', new_dog_path , class: "btn btn-sm btn-outline-secondary nav-button" %>
+              <%= link_to 'Sign out', destroy_user_session_path, method: :delete, class: "btn btn-sm btn-outline-secondary nav-button" %>
+            <% else %>
+              <%= link_to 'Sign in', new_user_session_path, class: "btn btn-sm btn-outline-secondary nav-button" %>
+              <%= link_to 'Sign up', new_user_registration_path, class: "btn btn-sm btn-outline-secondary nav-button" %>
+            <% end %>
+          </div>
         </div>
       </nav>
 
@@ -33,6 +35,5 @@
       </div>
       <div class="footer"></div>
     </div>
-
   </body>
 </html>
